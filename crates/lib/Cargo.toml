@@ -1,0 +1,26 @@
+[package]
+name = "ets-lib"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+name = "ets_lib"
+path = "src/lib.rs"
+
+[dependencies]
+edp_node.workspace = true
+erltf.workspace = true
+erltf_serde.workspace = true
+serde.workspace = true
+
+thiserror.workspace = true
+hostname.workspace = true
+rand.workspace = true
+dirs.workspace = true
+regex.workspace = true
+
+[dev-dependencies]
+regex.workspace = true

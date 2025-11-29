@@ -1,0 +1,47 @@
+// Copyright (C) 2025-2026 Michael S. Klishin and Contributors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+use ets_cli::output::format_memory;
+
+#[test]
+fn test_format_memory_zero() {
+    assert_eq!(format_memory(0), "0 B");
+}
+
+#[test]
+fn test_format_memory_bytes() {
+    assert_eq!(format_memory(500), "500 B");
+}
+
+#[test]
+fn test_format_memory_kibibytes() {
+    assert_eq!(format_memory(1024), "1 KiB");
+    assert_eq!(format_memory(2048), "2 KiB");
+}
+
+#[test]
+fn test_format_memory_mebibytes() {
+    assert_eq!(format_memory(1024 * 1024), "1 MiB");
+}
+
+#[test]
+fn test_format_memory_gibibytes() {
+    assert_eq!(format_memory(1024 * 1024 * 1024), "1 GiB");
+}
+
+#[test]
+fn test_format_memory_negative() {
+    assert_eq!(format_memory(-1), "-1 bytes");
+    assert_eq!(format_memory(-1000), "-1000 bytes");
+}

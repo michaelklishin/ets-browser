@@ -1,0 +1,19 @@
+{
+  "name": "ets-browser-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.3"
+  }
+}
