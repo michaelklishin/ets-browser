@@ -1,4 +1,4 @@
-# (Example) ets CLI
+# (Example) ets Browser in Rust: both CLI and Web UI
 
 This tiny project is an example of how [`edp-rs`](https://github.com/michaelklishin/edp-rs) can be used
 to interact with Erlang/Elixir/BEAM-based systems from Rust.
