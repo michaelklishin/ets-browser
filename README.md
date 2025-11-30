@@ -13,7 +13,7 @@ Since this is an example, all the commands below are `cargo run`-based.
 cargo run --bin 'ets-cli' '--' tables list --node rabbit@sunnyside
 ```
 
-# Display Contents of the `rabbit_registry` ETS Table on a RabbitMQ Node
+### Display Contents of the `rabbit_registry` ETS Table on a RabbitMQ Node
 
 ```shell
 cargo run --bin 'ets-cli' '--' tables dump --node rabbit@sunnyside --name rabbit_registry
