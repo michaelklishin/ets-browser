@@ -25,6 +25,14 @@ cargo run --bin 'ets-cli' '--' tables dump --node rabbit@sunnyside --name rabbit
 cargo run --bin 'ets-cli' '--' tables memory_breakdown --pattern '^ra_' --node rabbit@sunnyside
 ```
 
+### Start a Web Browser
+
+```shell
+cargo run --bin ets-web -- --node rabbit@sunnyside --port 3458
+```
+
+then navigate to [`http://localhost:3458`](http://localhost:3458).
+
 
 ## License
 
