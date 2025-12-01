@@ -33,7 +33,7 @@ struct TableRow {
     #[tabled(rename = "Type")]
     table_type: String,
     #[tabled(rename = "Objects")]
-    size: i64,
+    size: u64,
     #[tabled(rename = "Memory")]
     memory: String,
     #[tabled(rename = "Owner")]
@@ -49,16 +49,13 @@ struct MemoryBreakdownRow {
     #[tabled(rename = "Memory")]
     memory: String,
     #[tabled(rename = "Objects")]
-    size: i64,
+    size: u64,
     #[tabled(rename = "Type")]
     table_type: String,
 }
 
-pub fn format_memory(bytes: i64) -> String {
-    if bytes < 0 {
-        return format!("{} bytes", bytes);
-    }
-    format_size(bytes as u64, BINARY)
+pub fn format_memory(bytes: u64) -> String {
+    format_size(bytes, BINARY)
 }
 
 pub fn print_table_list(tables: Vec<EtsTableInfo>) {
@@ -91,7 +88,7 @@ pub fn print_memory_breakdown(tables: Vec<EtsTableInfo>) {
     }
 
     let count = tables.len();
-    let total_memory: i64 = tables.iter().map(|t| t.memory_bytes).sum();
+    let total_memory: u64 = tables.iter().map(|t| t.memory_bytes).sum();
 
     let rows: Vec<MemoryBreakdownRow> = tables
         .into_iter()

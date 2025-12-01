@@ -62,8 +62,8 @@ impl fmt::Display for Protection {
 pub struct EtsTableInfo {
     pub name: String,
     pub table_type: TableType,
-    pub size: i64,
-    pub memory_bytes: i64,
+    pub size: u64,
+    pub memory_bytes: u64,
     pub owner: String,
     pub protection: Protection,
 }
@@ -73,8 +73,8 @@ struct EtsTableInfoPartial {
     name: String,
     #[serde(rename = "type")]
     table_type: TableType,
-    size: i64,
-    memory: i64,
+    size: u64,
+    memory: u64,
     protection: Protection,
 }
 
@@ -95,28 +95,8 @@ async fn create_connected_node(remote_node: &str, cookie: &str) -> Result<Node> 
     Ok(node)
 }
 
-fn unwrap_rex_response(response: OwnedTerm) -> Result<OwnedTerm> {
-    match response {
-        OwnedTerm::Tuple(mut elements) if elements.len() == 2 => {
-            if let Some(atom) = elements[0].as_atom()
-                && atom.as_ref() == "rex"
-            {
-                return Ok(elements.pop().unwrap());
-            }
-            Err(Error::UnexpectedResponse(format!(
-                "Expected {{rex, Result}}, got: {:?}",
-                elements
-            )))
-        }
-        other => Err(Error::UnexpectedResponse(format!(
-            "Expected {{rex, Result}} tuple, got: {}",
-            other
-        ))),
-    }
-}
-
-async fn get_word_size(node: &Node, remote_node: &str) -> Result<i64> {
-    let response = node
+async fn get_word_size(node: &Node, remote_node: &str) -> Result<u64> {
+    let word_size = node
         .rpc_call(
             remote_node,
             "erlang",
@@ -125,18 +105,16 @@ async fn get_word_size(node: &Node, remote_node: &str) -> Result<i64> {
         )
         .await?;
 
-    let word_size = unwrap_rex_response(response)?;
-
     match word_size {
-        OwnedTerm::Integer(n) => Ok(n),
+        OwnedTerm::Integer(n) if n > 0 => Ok(n as u64),
         other => Err(Error::UnexpectedResponse(format!(
-            "Expected integer for wordsize, got: {}",
+            "Expected positive integer for wordsize, got: {}",
             other
         ))),
     }
 }
 
-fn parse_table_info(info_list: OwnedTerm, word_size: i64) -> Result<EtsTableInfo> {
+fn parse_table_info(info_list: OwnedTerm, word_size: u64) -> Result<EtsTableInfo> {
     let owner = info_list
         .proplist_get_atom_key("owner")
         .map(|t| t.to_string())
@@ -159,32 +137,17 @@ pub async fn list_tables(remote_node: &str, cookie: &str) -> Result<Vec<EtsTable
     let node = create_connected_node(remote_node, cookie).await?;
     let word_size = get_word_size(&node, remote_node).await?;
 
-    let response = node.rpc_call(remote_node, "ets", "all", vec![]).await?;
-    let tables_list = unwrap_rex_response(response)?;
-
-    let table_refs: Vec<OwnedTerm> = match tables_list {
-        OwnedTerm::List(refs) => refs,
-        OwnedTerm::Nil => vec![],
-        other => {
-            return Err(Error::UnexpectedResponse(format!(
-                "Expected list of table references, got: {}",
-                other
-            )));
-        }
-    };
+    let tables_list = node.rpc_call(remote_node, "ets", "all", vec![]).await?;
+    let table_refs = tables_list.try_into_list()?;
 
     let mut tables = Vec::with_capacity(table_refs.len());
 
     for table_ref in table_refs {
-        let info_response = node
+        let info_list = node
             .rpc_call(remote_node, "ets", "info", vec![table_ref])
             .await?;
 
-        let info_list = unwrap_rex_response(info_response)?;
-
-        if let OwnedTerm::Atom(atom) = &info_list
-            && atom.as_ref() == "undefined"
-        {
+        if info_list.is_undefined() {
             continue;
         }
 
@@ -205,29 +168,17 @@ pub async fn dump_table(
 
     let table_ref = OwnedTerm::atom(table_name);
 
-    let info_response = node
+    let info = node
         .rpc_call(remote_node, "ets", "info", vec![table_ref.clone()])
         .await?;
 
-    let info = unwrap_rex_response(info_response)?;
-    if let OwnedTerm::Atom(atom) = &info
-        && atom.as_ref() == "undefined"
-    {
+    if info.is_undefined() {
         return Err(Error::TableNotFound(table_name.to_string()));
     }
 
-    let response = node
+    let entries = node
         .rpc_call(remote_node, "ets", "tab2list", vec![table_ref])
         .await?;
 
-    let entries = unwrap_rex_response(response)?;
-
-    match entries {
-        OwnedTerm::List(list) => Ok(list),
-        OwnedTerm::Nil => Ok(vec![]),
-        other => Err(Error::UnexpectedResponse(format!(
-            "Expected list of entries, got: {}",
-            other
-        ))),
-    }
+    Ok(entries.try_into_list()?)
 }

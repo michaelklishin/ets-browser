@@ -397,9 +397,9 @@ dependencies = [
 
 [[package]]
 name = "edp_client"
-version = "0.6.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec5bbab0fb5b5aa07f76d650eba33f38910ec694be073d5cf3418a7fa601d806"
+checksum = "bfb75c14aa7904a8f64a9a754138ccb786a7c4c19734064698579cba3268a35f"
 dependencies = [
  "bitflags",
  "bytes",
@@ -414,9 +414,9 @@ dependencies = [
 
 [[package]]
 name = "edp_node"
-version = "0.6.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6777dc546adb43c91798f57463afe6ec6af9f7b8fede25f437acf8c0b571aecb"
+checksum = "82cd76f3d58b6c6ea251332b11009eb0714409194fa670255a1706fbb2228b71"
 dependencies = [
  "dashmap",
  "edp_client",
@@ -444,9 +444,9 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "erltf"
-version = "0.6.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fdfcf155b439ea19c501bf3d4b076038e5d08be4e465e22370d0c02c275d87d"
+checksum = "7ea3fc9c65a9ad52ae627dda2cfa3d2fdf2d1d5e58b6d60a3317ca47248f1b5f"
 dependencies = [
  "bytes",
  "flate2",
@@ -457,9 +457,9 @@ dependencies = [
 
 [[package]]
 name = "erltf_serde"
-version = "0.6.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fbf6441dfdda34f3800b7a5c2763b2e0339bcd158a077438595791a853f21d3"
+checksum = "3d2f7a150ce3f2a67842346378889ebcbb5ded96417220b37a13e04f6afd84d6"
 dependencies = [
  "erltf",
  "serde",
@@ -478,7 +478,7 @@ dependencies = [
 
 [[package]]
 name = "ets-cli"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "assert_cmd",
  "clap",
@@ -498,7 +498,7 @@ dependencies = [
 
 [[package]]
 name = "ets-lib"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "dirs",
  "edp_node",
@@ -508,12 +508,13 @@ dependencies = [
  "rand",
  "regex",
  "serde",
+ "serde_json",
  "thiserror",
 ]
 
 [[package]]
 name = "ets-web"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "assert_cmd",
  "axum",

@@ -27,7 +27,7 @@ fn test_env_cookie_used_when_no_explicit() {
 }
 
 #[test]
-fn test_explicit_cookie_trims_whitespace() {
+fn test_explicit_cookie_preserves_whitespace() {
     let result = get_erlang_cookie(Some("  cookie_value  "), None);
     assert_eq!(result.unwrap(), "  cookie_value  ");
 }

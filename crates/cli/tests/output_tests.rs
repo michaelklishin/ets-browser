@@ -39,9 +39,3 @@ fn test_format_memory_mebibytes() {
 fn test_format_memory_gibibytes() {
     assert_eq!(format_memory(1024 * 1024 * 1024), "1 GiB");
 }
-
-#[test]
-fn test_format_memory_negative() {
-    assert_eq!(format_memory(-1), "-1 bytes");
-    assert_eq!(format_memory(-1000), "-1000 bytes");
-}

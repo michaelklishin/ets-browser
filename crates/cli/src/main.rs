@@ -100,13 +100,9 @@ fn resolve_erlang_cookie(args: &ArgMatches) -> Result<String> {
 }
 
 fn get_pattern_filter(args: &ArgMatches) -> Result<Option<Regex>> {
-    match args.get_one::<String>("pattern") {
-        Some(pattern) => {
-            let re = Regex::new(pattern).map_err(|e| Error::InvalidPattern(e.to_string()))?;
-            Ok(Some(re))
-        }
-        None => Ok(None),
-    }
+    args.get_one::<String>("pattern")
+        .map(|p| Regex::new(p).map_err(|e| Error::InvalidPattern(e.to_string())))
+        .transpose()
 }
 
 async fn do_list_tables(args: &ArgMatches) -> Result<()> {
