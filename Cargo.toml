@@ -12,9 +12,9 @@ repository = "https://github.com/michaelklishin/ets-browser"
 [workspace.dependencies]
 ets-lib = { path = "crates/lib" }
 
-edp_node = "0.12"
-erltf = "0.12"
-erltf_serde = "0.12"
+edp_node = "0.13"
+erltf = "0.13"
+erltf_serde = "0.13"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 

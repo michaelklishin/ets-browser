@@ -12,41 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use erltf::OwnedTerm;
+use erltf::{OwnedTerm, erl_atom, erl_int, erl_map};
 use erltf_serde::from_term;
 use ets_lib::{EtsTableInfo, Protection, TableType};
-use std::collections::BTreeMap;
 
 #[test]
 fn test_table_type_deserialization_from_atoms() {
-    let term = OwnedTerm::atom("set");
+    let term = erl_atom!("set");
     let table_type: TableType = from_term(&term).unwrap();
     assert_eq!(table_type, TableType::Set);
 
-    let term = OwnedTerm::atom("ordered_set");
+    let term = erl_atom!("ordered_set");
     let table_type: TableType = from_term(&term).unwrap();
     assert_eq!(table_type, TableType::OrderedSet);
 
-    let term = OwnedTerm::atom("bag");
+    let term = erl_atom!("bag");
     let table_type: TableType = from_term(&term).unwrap();
     assert_eq!(table_type, TableType::Bag);
 
-    let term = OwnedTerm::atom("duplicate_bag");
+    let term = erl_atom!("duplicate_bag");
     let table_type: TableType = from_term(&term).unwrap();
     assert_eq!(table_type, TableType::DuplicateBag);
 }
 
 #[test]
 fn test_protection_deserialization_from_atoms() {
-    let term = OwnedTerm::atom("public");
+    let term = erl_atom!("public");
     let protection: Protection = from_term(&term).unwrap();
     assert_eq!(protection, Protection::Public);
 
-    let term = OwnedTerm::atom("protected");
+    let term = erl_atom!("protected");
     let protection: Protection = from_term(&term).unwrap();
     assert_eq!(protection, Protection::Protected);
 
-    let term = OwnedTerm::atom("private");
+    let term = erl_atom!("private");
     let protection: Protection = from_term(&term).unwrap();
     assert_eq!(protection, Protection::Private);
 }
@@ -68,16 +67,14 @@ fn test_protection_display() {
 
 #[test]
 fn test_ets_table_info_from_map() {
-    let mut map = BTreeMap::new();
-    map.insert(OwnedTerm::atom("name"), OwnedTerm::atom("test_table"));
-    map.insert(OwnedTerm::atom("type"), OwnedTerm::atom("set"));
-    map.insert(OwnedTerm::atom("size"), OwnedTerm::Integer(100));
-    map.insert(OwnedTerm::atom("memory"), OwnedTerm::Integer(1024));
-    map.insert(OwnedTerm::atom("protection"), OwnedTerm::atom("public"));
-    map.insert(
-        OwnedTerm::atom("owner"),
-        OwnedTerm::String("<0.123.0>".to_string()),
-    );
+    let term = erl_map! {
+        erl_atom!("name") => erl_atom!("test_table"),
+        erl_atom!("type") => erl_atom!("set"),
+        erl_atom!("size") => erl_int!(100),
+        erl_atom!("memory") => erl_int!(1024),
+        erl_atom!("protection") => erl_atom!("public"),
+        erl_atom!("owner") => OwnedTerm::String("<0.123.0>".to_string())
+    };
 
     #[derive(serde::Deserialize)]
     struct PartialInfo {
@@ -89,7 +86,6 @@ fn test_ets_table_info_from_map() {
         protection: Protection,
     }
 
-    let term = OwnedTerm::Map(map);
     let info: PartialInfo = from_term(&term).unwrap();
 
     assert_eq!(info.name, "test_table");
@@ -123,28 +119,28 @@ fn test_ets_table_info_serialization() {
 
 #[test]
 fn test_table_type_deserialization_rejects_invalid_atom() {
-    let term = OwnedTerm::atom("invalid_type");
+    let term = erl_atom!("invalid_type");
     let result: Result<TableType, _> = from_term(&term);
     assert!(result.is_err());
 }
 
 #[test]
 fn test_protection_deserialization_rejects_invalid_atom() {
-    let term = OwnedTerm::atom("invalid_protection");
+    let term = erl_atom!("invalid_protection");
     let result: Result<Protection, _> = from_term(&term);
     assert!(result.is_err());
 }
 
 #[test]
 fn test_table_type_deserialization_rejects_non_atom() {
-    let term = OwnedTerm::Integer(42);
+    let term = erl_int!(42);
     let result: Result<TableType, _> = from_term(&term);
     assert!(result.is_err());
 }
 
 #[test]
 fn test_protection_deserialization_rejects_non_atom() {
-    let term = OwnedTerm::Integer(42);
+    let term = erl_int!(42);
     let result: Result<Protection, _> = from_term(&term);
     assert!(result.is_err());
 }

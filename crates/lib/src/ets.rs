@@ -14,7 +14,7 @@
 
 use crate::errors::{Error, Result};
 use edp_node::Node;
-use erltf::OwnedTerm;
+use erltf::{OwnedTerm, erl_atom};
 use erltf_serde::from_term;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
@@ -101,7 +101,7 @@ async fn get_word_size(node: &Node, remote_node: &str) -> Result<u64> {
             remote_node,
             "erlang",
             "system_info",
-            vec![OwnedTerm::atom("wordsize")],
+            vec![erl_atom!("wordsize")],
         )
         .await?;
 
@@ -166,7 +166,7 @@ pub async fn dump_table(
 ) -> Result<Vec<OwnedTerm>> {
     let node = create_connected_node(remote_node, cookie).await?;
 
-    let table_ref = OwnedTerm::atom(table_name);
+    let table_ref = erl_atom!(table_name);
 
     let info = node
         .rpc_call(remote_node, "ets", "info", vec![table_ref.clone()])
