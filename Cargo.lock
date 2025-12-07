@@ -397,9 +397,9 @@ dependencies = [
 
 [[package]]
 name = "edp_client"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2ea2b402100757587b53dd4dc9fc0f0e7be4b59fcc41a72719c9c733bcd99e0a"
+checksum = "a05546e5487c2f197f7365883a71a6864c41dc4faaf0242ade88883a816aed0c"
 dependencies = [
  "bitflags",
  "bytes",
@@ -414,9 +414,9 @@ dependencies = [
 
 [[package]]
 name = "edp_node"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a76c215e78f8dba910d407564d0a348d148cb47bcedcd613dd25cb550237fa9"
+checksum = "944452244f8fec6615e961ec8177e560b4600a88a2fb21222686b17437da5ca3"
 dependencies = [
  "dashmap",
  "edp_client",
@@ -444,9 +444,9 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "erltf"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a96bf3f99a502cc153c29818f8970e650d8f00cef15e21269513617b5586e71"
+checksum = "4a75123857a2c94f42f832cfb954a06f7aae5f085ca7d537bf6f4f77023e5e04"
 dependencies = [
  "bytes",
  "flate2",
@@ -457,13 +457,25 @@ dependencies = [
 
 [[package]]
 name = "erltf_serde"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af702b40cbe7e9fbf3dda0fba77e6129763acd953cd809bd5cff28bccdabf740"
+checksum = "f8a28c3d1e321b0077cbb0f950b186cfb299871696c62de9ab5f8c59e07626db"
 dependencies = [
  "erltf",
+ "erltf_serde_derive",
  "serde",
  "thiserror",
+]
+
+[[package]]
+name = "erltf_serde_derive"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "267ec0edfa1c6a6ba2794dd33697dfe4d40a51aed48c1c2d1099a9244fd02951"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
